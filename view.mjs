@@ -23,10 +23,19 @@ export class Harbor {
       uniforms:{time:{value:0},shade:{value:new T.Color(0x184e62)}},
       vertexShader:'varying vec2 p;void main(){p=position.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
       fragmentShader:`varying vec2 p;uniform float time;uniform vec3 shade;
-      void main(){float r=length(p); float w=sin(p.x*3.+p.y*2.+time*.8)+sin(p.x*1.4-p.y*4.-time*.7);
-      float ripple=pow(max(0.,sin(r*8.+w*.65-time*1.1)),14.);
-      vec3 c=shade+vec3(.015,.09,.09)*exp(-r*.11)+vec3(.02,.15,.15)*ripple*.32;
-      gl_FragColor=vec4(pow(c,vec3(.62)),1.);}`
+      void main(){
+        float r=length(p);
+        float waves=sin(p.x*2.8+p.y*3.4+time*.65)*sin(p.x*1.7-p.y*5.1-time*.46);
+        float glint=smoothstep(.74,.99,waves);
+        float shelfDistance=(r-2.35)*1.7;
+        float foamDistance=(r-2.53-sin(atan(p.y,p.x)*10.+time)*.065)*19.;
+        float shelf=exp(-shelfDistance*shelfDistance);
+        float foam=exp(-foamDistance*foamDistance);
+        vec3 c=mix(vec3(.041,.14,.22),shade,.76)+vec3(.022,.081,.083)*exp(-r*.12);
+        c+=vec3(.065,.20,.16)*shelf+vec3(.25,.49,.41)*foam*.58;
+        c+=vec3(.10,.24,.22)*glint*(.25+.45*exp(-r*.15));
+        gl_FragColor=vec4(c,1.);
+      }`
     });
     const sea=new T.Mesh(new T.PlaneGeometry(80,80),this.water);
     sea.rotation.x=-Math.PI/2;
@@ -62,8 +71,10 @@ export class Harbor {
     this.cylinder(2.02,2.16,.28,0x839471,0,.67,0);
     this.cylinder(.78,.92,.32,0x7b8584,0,.91,0);
     this.cylinder(.57,.75,2.35,0xf8e4b9,0,2.22,0);
-    this.cylinder(.68,.71,.32,0xd35d48,0,1.62,0);
-    this.cylinder(.59,.62,.32,0xd35d48,0,2.82,0);
+    this.cylinder(.72,.75,.34,0xc74f39,0,1.62,0);
+    this.cylinder(.63,.66,.34,0xc74f39,0,2.82,0);
+    this.cylinder(.62,.64,.065,0xd8aa73,0,3.24,0);
+    this.cylinder(.74,.76,.085,0x9b8666,0,1.13,0);
     this.cylinder(.88,.69,.18,0x344e57,0,3.49,0);
     this.lamp=this.cylinder(.54,.54,.56,0xf5bb54,0,3.84,0);
     this.lamp.material=new T.MeshStandardMaterial({color:0xffcf68,emissive:0xef8d23,emissiveIntensity:.8});
@@ -99,7 +110,7 @@ export class Harbor {
       const a=i*2.399,r=8.2+(i%3)*.56;
       this.cylinder(.32,.69,.55,0x56797e,Math.cos(a)*r,.1,Math.sin(a)*r,this.scene,5);
     }
-    for(const [x,z] of [[-10,-2],[10,2]]){
+    for(const [x,z] of [[-4.6,-8.35],[4.9,8.35]]){
       this.cylinder(1.5,1.85,.45,0x536b65,x,.18,z,this.scene,8);
       this.cylinder(1.45,1.56,.18,0x81936e,x,.48,z,this.scene,8);
       this.box(1.06,.62,.8,0xdbb48c,x,.88,z);
@@ -108,6 +119,8 @@ export class Harbor {
       this.box(.12,.28,.12,0x806d64,x+.24,1.49,z-.12);
       this.box(.23,.23,.035,0xf2bf70,x-.22,.91,z+.41);
       this.box(.22,.39,.035,0x42616a,x+.19,.77,z+.41);
+      this.box(1.27,.12,.24,0xae8055,x,.52,z+.55);
+      this.box(.30,.23,.31,0xb88959,x-.58,.7,z+.46);
       for(const offset of [-1.03,1.04]){
         this.cylinder(.065,.08,.46,0x654d40,x+offset,.78,z-.23);
         this.cylinder(.05,.34,.7,0x527a63,x+offset,1.16,z-.23,this.scene,6);
@@ -146,6 +159,9 @@ export class Harbor {
       this.box(.025,.13,.18,0x457786,.12,.46,0,boat);
       this.box(.06,.29,.06,0x704c49,-.22,.56,0,boat);
       this.box(.09,.09,.09,0xffd78b,.3,.43,0,boat);
+      this.box(.48,.055,.04,0x693f3e,-.05,.23,.218,boat);
+      this.box(.48,.055,.04,0x693f3e,-.05,.23,-.218,boat);
+      this.box(.18,.11,.025,color,-.24,.72,0,boat);
       const wake=this.box(.65,.012,.22,0xa3dad0,-.69,.02,0,boat);
       const marker=this.cylinder(.10,.10,.032,0xffd57e,0,.06,0,this.course,8);
       return {boat,wake,marker};
@@ -180,7 +196,7 @@ export class Harbor {
     }
     positions.needsUpdate=true;
     this.beam.material.color.set(p.gold?0xffc66d:0xffe7ab);
-    this.beam.material.opacity=.19+Math.sin(t*2)*.018;
+    this.beam.material.opacity=.27+Math.sin(t*2)*.018;
     this.fireworks.visible=p.confetti&&run.boats.every(x=>x===1);
     if(this.fireworks.visible){
       const sparks=this.fireworks.geometry.attributes.position;

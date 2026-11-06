@@ -1,18 +1,18 @@
 *{box-sizing:border-box}
 :root{color-scheme:dark;font-family:system-ui,sans-serif;color:#f5e5c6;background:#102c35;--gold:#f3c57e;--muted:#a1bdb8}
 body{margin:0;background:radial-gradient(ellipse at 50% 5%,#274a51,#102c35 68%);min-height:100dvh}
-main{max-width:1050px;margin:auto;padding:clamp(12px,2vw,25px)}
+main{width:min(100%,440px);margin:auto;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
 header,.desk,.chart-head{display:flex;justify-content:space-between;align-items:center;gap:14px}
 header{margin-bottom:14px}
 h1,h2,p{margin:0}
 h1,h2{font-family:Georgia,serif;font-weight:normal}
-h1{font-size:clamp(30px,5vw,52px);line-height:1.04}
+h1{font-size:clamp(29px,8vw,40px);line-height:1.04}
 h1 em{color:var(--gold);font-weight:normal}
 .eyebrow,small,.dial span{font-size:10px;letter-spacing:.16em;color:var(--muted);font-weight:700}
 button{cursor:pointer;font:inherit;border:1px solid #67827d;border-radius:9px;padding:8px 12px;min-height:40px;background:#244750;color:#f8ead0}
 button:hover,button:focus-visible{border-color:var(--gold)}
 button:disabled{opacity:.38;cursor:default}
-.chart{position:relative;height:clamp(370px,64dvh,610px);overflow:hidden;border:1px solid #6c9289;border-radius:20px;background:#235568;box-shadow:0 18px 40px #081f29aa}
+.chart{position:relative;aspect-ratio:3/4;overflow:hidden;border:1px solid #78938b;border-radius:18px;background:#174759;box-shadow:0 18px 40px #081f29aa}
 canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
 .chart-head{position:absolute;inset:0 0 auto;padding:17px 19px;pointer-events:none;background:linear-gradient(#10313bdc,transparent)}
 .chart-head h2{font-size:clamp(23px,4vw,34px)}
@@ -32,8 +32,11 @@ nav{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
 nav button[aria-current=true]{border-color:var(--gold);color:var(--gold)}
 .foot{color:var(--muted);font-size:11px;margin:9px 0}
 [hidden]{display:none!important}
-@media(max-width:540px){
-  .chart{height:clamp(365px,57dvh,515px);border-radius:14px}
+#sound{white-space:nowrap;font-size:12px}
+nav{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+nav button{padding:6px 2px;font-size:13px}
+.dial input{height:28px;margin:0}
+@media(min-width:0px){
   .chart-head{padding:12px}
   .compass{top:68px;right:14px}
   .desk{display:grid;grid-template-columns:1fr auto;gap:8px}
