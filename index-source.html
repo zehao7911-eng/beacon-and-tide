@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#102c35"><title>Beacon &amp; Tide</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<main>
+  <header><div><div class="eyebrow">THE LITTLE COAST · LIGHTHOUSE SERVICE</div><h1>Beacon <em>&amp;</em> Tide</h1></div><button id="sound" aria-pressed="true">Sound on</button></header>
+  <section class="chart" aria-label="Harbor navigation">
+    <canvas aria-label="Lighthouse and boats. Tap a boat or drag to steer the beam."></canvas>
+    <div class="chart-head"><div><small id="number"></small><h2 id="chartName"></h2></div><div id="count" class="count"></div></div>
+    <div class="compass" aria-hidden="true">✦<small>N</small></div>
+    <div id="message" class="message" role="status"></div>
+    <div id="result" class="result" hidden><div id="stars" class="stars"></div><h2>Safe at harbor</h2><p id="summary"></p><button id="next">Next chart →</button><button id="retry">Replay</button></div>
+  </section>
+  <section class="desk">
+    <div><div class="eyebrow">KEEPER'S CONTROLS</div><p id="instruction">Tap a boat, then follow it with the light.</p></div>
+    <label class="dial"><span>Beam direction</span><input id="direction" type="range" min="-180" max="180" step="1" value="0"></label>
+    <button id="pause">Pause</button>
+  </section>
+  <nav id="charts" aria-label="Voyage charts"></nav>
+  <p id="rewards" class="foot" hidden></p>
+  <p class="foot">Three stars for a safe fleet, a quick crossing and steady light.</p>
+</main>
+<script src="vendor/three.min.js"></script>
+<script type="module" src="app.mjs"></script>
+</body></html>
